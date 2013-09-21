@@ -13,17 +13,25 @@ import java.util.ArrayList;
 public class Node {
 
     private boolean walkable;
+    private boolean checked;
     private Node parent;
     private ArrayList<Node> neighbours;
     private float g;
+    private float h;
     private char token;
+    public final int x;
+    public final int y;
 
-    public Node(boolean walkable) {
+    public Node(boolean walkable, int x, int y) {
         this.walkable = walkable;
+        this.checked = false;
         this.parent = null;
-        this.g = 0;
+        this.g = Float.POSITIVE_INFINITY;
         this.neighbours = new ArrayList<>();
         this.setWalkable(walkable);
+
+        this.x = x;
+        this.y = y;
     }
 
     public void addNeighbour(Node n) {
@@ -31,7 +39,7 @@ public class Node {
     }
 
     public float getF() {
-        return getG() + h();
+        return getG() + getH();
     }
 
     public void setG(float g) {
@@ -42,8 +50,12 @@ public class Node {
         return g;
     }
 
-    public float h() {
-        return 0;
+    public void setH(Node goal) {
+        this.h = Math.abs((goal.x - x) * (goal.x - x) + (goal.y - y) * (goal.y - y));
+    }
+
+    public float getH() {
+        return h;
     }
 
     public void setParent(Node parent) {
@@ -73,6 +85,14 @@ public class Node {
 
     public boolean isWalkable() {
         return walkable;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 
     @Override

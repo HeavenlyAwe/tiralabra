@@ -26,6 +26,7 @@ public class Implementation {
     }
 
     public boolean aStar(Node start, Node goal) {
+        start.setG(0);
 
         open = new PriorityQueue<>(10, new NodeComparator());
         closed = new ArrayList<>();
@@ -35,9 +36,8 @@ public class Implementation {
 
         while (true) {
             grid.updateGui();
-            System.out.println("");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Implementation.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -59,14 +59,23 @@ public class Implementation {
             }
             closed.add(n);
 
+            System.out.println(n.getNeighbours().size());
+            grid.showNeighbours(n);
+
             for (Node neighbour : n.getNeighbours()) {
+                neighbour.setH(goal);
+
+                System.out.println("Checking: " + neighbour.x + ", " + neighbour.y);
+
                 if (!neighbour.isWalkable()) {
+                    System.out.println("Not walkable neighbour");
                     continue;
                 }
 
                 float cost = n.getG() + movementCost(n, neighbour);
 
                 if (open.contains(neighbour) && cost < neighbour.getG()) {
+                    System.out.println("Removing from Open");
                     open.remove(neighbour);
                 }
                 /*
@@ -74,12 +83,14 @@ public class Implementation {
                  * However in games we often have inadmissible heuristics.
                  */
                 if (closed.contains(neighbour) && cost < neighbour.getG()) {
+                    System.out.println("Removing from Closed");
                     closed.remove(neighbour);
                 }
 
                 if (!closed.contains(neighbour) && !open.contains(neighbour)) {
                     neighbour.setG(cost);
                     open.add(neighbour);
+                    neighbour.setChecked(true);
                     neighbour.setParent(n);
                 }
 
@@ -96,6 +107,7 @@ public class Implementation {
         Node n = goal;
         while (n != null) {
             n.setToken('p');
+            grid.showPath(n.x, n.y);
             n = n.getParent();
         }
     }
