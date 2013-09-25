@@ -45,7 +45,7 @@ public class Grid {
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                grid[i][j] = new Node(new Vertex(new Vector3f(i * TILE_SIZE, 0, j * TILE_SIZE)), dijkstraHeuristic, true);
+                grid[i][j] = new Node(new Vertex(new Vector3f(i * TILE_SIZE, 0, j * TILE_SIZE)), manhattanHeuristic, true);
             }
         }
 
