@@ -5,7 +5,7 @@
 package org.fridlund.astar.impl;
 
 import java.util.ArrayList;
-import org.lwjgl.util.vector.Vector3f;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  *
@@ -23,7 +23,8 @@ public class Node {
     private float g;
     private Heuristic heuristic;
     private float h;
-    
+    private Color color;
+
     public Node(Vertex vertex, Heuristic heuristic, boolean walkable) {
         this.vertex = vertex;
         this.walkable = walkable;
@@ -31,69 +32,86 @@ public class Node {
         this.parent = null;
         this.g = Float.POSITIVE_INFINITY;
         this.neighbours = new ArrayList<>();
+        this.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
         this.setWalkable(walkable);
     }
-    
+
     public void addNeighbour(Node n) {
         neighbours.add(n);
     }
-    
+
     public float getF(Node goal) {
         return getG() + getH(goal);
     }
-    
+
     public void setG(float g) {
         this.g = g;
     }
-    
+
     public float getG() {
         return g;
     }
 
-//    /**
-//     * Heuristic method using the Manhattan algorithm
-//     *
-//     * @param goal
-//     */
-//    public void setH(Node goal) {
-//        Vector3f goalPosition = goal.getVertex().getPosition();
-//        Vector3f position = vertex.getPosition();
-//        
-//        float dx = goalPosition.x - position.x;
-//        float dy = goalPosition.y - position.y;
-//        float dz = goalPosition.z - position.z;
-//        
-//        this.h = dx + dy + dz;
-//    }
-    
     public float getH(Node goal) {
+        if (goal == null) {
+            return Float.POSITIVE_INFINITY;
+        }
         return heuristic.heuristic(this, goal);
     }
-    
+
     public void setParent(Node parent) {
         this.parent = parent;
     }
-    
+
     public Node getParent() {
         return parent;
     }
-    
+
     public ArrayList<Node> getNeighbours() {
         return neighbours;
     }
-    
-    public void setWalkable(boolean walkable) {
+
+    public final void setWalkable(boolean walkable) {
         this.walkable = walkable;
+        if (!walkable) {
+            this.color = Color.RED;
+        } else {
+            this.color = Color.GREY;
+        }
     }
-    
+
     public boolean isWalkable() {
         return walkable;
     }
-    
+
     public Vertex getVertex() {
         return vertex;
     }
-    
+
+    public void setColor(float r, float g, float b, float a) {
+        this.color = new Color(r, g, b, a);
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void render() {
+        glBegin(GL_QUADS);
+        {
+            glColor4f(color.r, color.g, color.b, color.a);
+            glVertex3f(vertex.getPosition().x, 0, vertex.getPosition().z);
+            glVertex3f(vertex.getPosition().x + Grid.TILE_SIZE - 1, 0, vertex.getPosition().z);
+            glVertex3f(vertex.getPosition().x + Grid.TILE_SIZE - 1, 0, vertex.getPosition().z + Grid.TILE_SIZE - 1);
+            glVertex3f(vertex.getPosition().x, 0, vertex.getPosition().z + Grid.TILE_SIZE - 1);
+        }
+        glEnd();
+    }
+
     @Override
     public String toString() {
         return "Node: " + vertex.getPosition() + ": H = " + h + ", G = " + g;

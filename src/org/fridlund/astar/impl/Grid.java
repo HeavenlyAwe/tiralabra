@@ -29,9 +29,9 @@ public class Grid {
                 Vector3f goalPosition = goal.getVertex().getPosition();
                 Vector3f position = current.getVertex().getPosition();
 
-                float dx = goalPosition.x - position.x;
-                float dy = goalPosition.y - position.y;
-                float dz = goalPosition.z - position.z;
+                float dx = Math.abs(goalPosition.x - position.x);
+                float dy = Math.abs(goalPosition.y - position.y);
+                float dz = Math.abs(goalPosition.z - position.z);
 
                 return dx + dy + dz;
             }
@@ -124,5 +124,21 @@ public class Grid {
 
     public Node[][] getGrid() {
         return grid;
+    }
+
+    public int getWidth() {
+        return grid.length;
+    }
+
+    public int getHeight() {
+        return grid[0].length;
+    }
+
+    public void render() {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                grid[i][j].render();
+            }
+        }
     }
 }

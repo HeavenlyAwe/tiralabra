@@ -19,7 +19,7 @@ public class AStar {
     private PriorityQueue<Node> open;
     private ArrayList<Node> closed;
     private ArrayList<Node> path;
-    private Node goal_node;
+    private Node goalNode;
 
     public AStar(Node start, Node goal) {
 
@@ -31,7 +31,7 @@ public class AStar {
     }
 
     public final void restart(Node start, Node goal) {
-        goal_node = goal;
+        goalNode = goal;
 
         open.clear();
         closed.clear();
@@ -51,28 +51,27 @@ public class AStar {
             System.out.println("");
             throw new RuntimeException("Non-reachable node!");
         }
-        if (n.equals(goal_node)) {
+        if (n.equals(goalNode)) {
             System.out.println("");
             System.out.println("Goal reached!");
             System.out.println("");
             return true;
         }
+
         closed.add(n);
+        n.setColor(Color.GREEN);
 
         for (Node neighbour : n.getNeighbours()) {
-//            neighbour.setH(goal_node);
 
             if (!neighbour.isWalkable()) {
-                System.out.println("Not walkable neighbour");
                 continue;
             }
 
             float cost = n.getG() + movementCost(n, neighbour);
-            System.out.println("Cost: " + cost);
 
             if (open.contains(neighbour) && cost < neighbour.getG()) {
-                System.out.println("Removing from Open");
                 open.remove(neighbour);
+                neighbour.setColor(Color.GREY);
             }
 //            /*
 //             * This should never happen if you have an monotone admissible heuristic.
@@ -88,6 +87,7 @@ public class AStar {
             if (!closed.contains(neighbour) && !open.contains(neighbour)) {
                 neighbour.setG(cost);
                 open.add(neighbour);
+                neighbour.setColor(Color.BLUE);
                 neighbour.setParent(n);
             }
 
@@ -105,14 +105,28 @@ public class AStar {
     }
 
     public void showPath() {
-        Node n = goal_node;
+        Node n = goalNode;
+
         while (n != null) {
             path.add(n);
+            n.setColor(Color.MAGENTA);
             n = n.getParent();
         }
 
         open.clear();
         closed.clear();
+    }
+
+    public boolean isPath(Node n) {
+        return path.contains(n);
+    }
+
+    public boolean isOpened(Node n) {
+        return open.contains(n);
+    }
+
+    public boolean isClosed(Node n) {
+        return closed.contains(n);
     }
 
     public Collection getClosedList() {
@@ -132,10 +146,10 @@ public class AStar {
         @Override
         public int compare(Node o1, Node o2) {
 
-            if (o2.getF(goal_node) < o1.getF(goal_node)) {
+            if (o2.getF(goalNode) < o1.getF(goalNode)) {
                 return 1;
             }
-            if (o2.getF(goal_node) > o1.getF(goal_node)) {
+            if (o2.getF(goalNode) > o1.getF(goalNode)) {
                 return -1;
             }
             return 0;

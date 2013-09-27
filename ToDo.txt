@@ -1,0 +1,15 @@
+Important ToDo:
+------------------------
+- Own PriorityQueue
+- Own ArrayList
+- Stress test with big labyrinths
+
+
+ToDo:
+------------------------
+- Method to change between heuristic methods.
+- Remove path when clicking one of the mouse buttons when finished
+- Destroy methods for the OpenGL stuff (no memory leaks)
+- More heuristic methods
+- Test different data structures for improving the pathfinding
+- Better method of generating walls
