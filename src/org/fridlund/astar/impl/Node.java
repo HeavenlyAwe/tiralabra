@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Christoffer
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
     // Parent for retracking the path
     private Node parent;
@@ -115,5 +115,16 @@ public class Node {
     @Override
     public String toString() {
         return "Node: " + vertex.getPosition() + ": H = " + h + ", G = " + g;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+//        if(o.floatValue() > getG()){
+//            return 1;
+//        } else if(o.floatValue() < getG()){
+//            return -1;
+//        }
+        
+        return 0;
     }
 }

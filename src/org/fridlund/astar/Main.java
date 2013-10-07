@@ -5,7 +5,10 @@
 package org.fridlund.astar;
 
 import java.io.File;
-import org.fridlund.astar.gui.LWJGLgui;
+import org.fridlund.astar.impl.AStar;
+import org.fridlund.astar.impl.Grid;
+import org.fridlund.astar.impl.Node;
+import org.fridlund.collections.priorityqueue.PriorityQueue;
 import org.lwjgl.LWJGLUtil;
 
 /**
@@ -47,7 +50,47 @@ public class Main {
         setupNativesLWJGL();
         Screen.setupDisplay(TITLE, WIDTH, HEIGHT);
 
+
         Game game = new Game();
         game.start();
+
+//        Grid g = new Grid(10, 10);
+//        g.generateNodes();
+//
+//        Node start = g.getNode(0, 0);
+//        Node goal = g.getNode(9, 9);
+//
+//        AStar aStar = new AStar(start, goal);
+//
+//        AStar.NodeComparator comp = aStar.new NodeComparator();
+//        PriorityQueue<Node> q = new PriorityQueue<>(comp);
+//
+//        q.add(g.getNode(0, 0));
+//        q.add(g.getNode(0, 1));
+//        q.add(g.getNode(1, 0));
+//        q.add(g.getNode(1, 1));
+//
+//        System.out.println("");
+//        System.out.println("");
+//
+//        System.out.println("");
+//        Object[] nodes = q.toArray();
+//        for (int i = 0; i < nodes.length; i++) {
+//            System.out.println((Node) nodes[i]);
+//        }
+//        System.out.println("");
+//
+//        Node n = q.poll();
+//        System.out.println("");
+//        System.out.println("n = " + n);
+//        System.out.println("first = " + g.getNode(0, 0));
+//        System.out.println("last = " + g.getNode(1, 1));
+//
+//        System.out.println("");
+//        nodes = q.toArray();
+//        for (int i = 0; i < nodes.length; i++) {
+//            System.out.println((Node) nodes[i]);
+//        }
+//        System.out.println("");
     }
 }

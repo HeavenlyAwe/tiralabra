@@ -4,10 +4,12 @@
  */
 package org.fridlund.astar.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.fridlund.collections.arraylist.ArrayList;
+import org.fridlund.collections.priorityqueue.PriorityQueue;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -23,7 +25,7 @@ public class AStar {
 
     public AStar(Node start, Node goal) {
 
-        open = new PriorityQueue<>(10, new NodeComparator());
+        open = new PriorityQueue<>(new NodeComparator());
         closed = new ArrayList<>();
         path = new ArrayList<>();
 
@@ -141,16 +143,16 @@ public class AStar {
         return path;
     }
 
-    private class NodeComparator implements Comparator<Node> {
+    public class NodeComparator implements Comparator<Node> {
 
         @Override
         public int compare(Node o1, Node o2) {
 
             if (o2.getF(goalNode) < o1.getF(goalNode)) {
-                return 1;
+                return -1;
             }
             if (o2.getF(goalNode) > o1.getF(goalNode)) {
-                return -1;
+                return 1;
             }
             return 0;
         }
