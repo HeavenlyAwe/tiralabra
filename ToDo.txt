@@ -1,12 +1,16 @@
 Important ToDo:
 ------------------------
-- Own PriorityQueue
-- Own ArrayList
 - Stress test with big labyrinths
 
 
 ToDo:
 ------------------------
+- GUI
+        - Add a seed field, for easier testing the same levels
+	- Add labels for the text fields
+	- Add a toggle button for allowing the diagonals
+        - Add method to change heuristics
+
 - Method to change between heuristic methods.
 - Remove path when clicking one of the mouse buttons when finished
 - Destroy methods for the OpenGL stuff (no memory leaks)

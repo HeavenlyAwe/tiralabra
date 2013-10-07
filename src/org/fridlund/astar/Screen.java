@@ -14,13 +14,16 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * Wrapper class for the LWGJL Display object
  *
  * @author Christoffer
  */
 public class Screen {
 
     /**
-     * Setup the LWJGL display object
+     * Setup the LWJGL display object.
+     *
+     * Activates the Mouse and the Keyboard as well.
      *
      * @param title
      * @param width
@@ -52,5 +55,12 @@ public class Screen {
 
     public static boolean isCloseRequested() {
         return Display.isCloseRequested();
+    }
+
+    public static void destroy() {
+        Keyboard.destroy();
+        Mouse.destroy();
+        Display.destroy();
+        System.exit(0);
     }
 }

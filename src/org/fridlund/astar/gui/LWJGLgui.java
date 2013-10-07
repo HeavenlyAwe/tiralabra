@@ -12,6 +12,7 @@ import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.fridlund.astar.Game;
@@ -34,12 +35,14 @@ public class LWJGLgui extends Widget {
     private int gridHeight;
     private EditField gridWidthEditField;
     private EditField gridHeightEditField;
+    private EditField evaluationTimeEditField;
     private Button createGridButton;
     private Button startSimulationButton;
     private Button selectStartButton;
     private Button selectGoalButton;
     private Button drawWallButton;
     private Button drawFloorButton;
+    private ArrayList<Widget> widgets;
 
     public LWJGLgui(Game game) {
         this.game = game;
@@ -61,8 +64,11 @@ public class LWJGLgui extends Widget {
         }
         gui.applyTheme(themeManager);
 
+        widgets = new ArrayList<>();
+
         createEditFields();
         createButtons();
+
     }
 
     /**
@@ -79,6 +85,7 @@ public class LWJGLgui extends Widget {
         });
         gridWidthEditField.setTheme("editfield");
         this.add(gridWidthEditField);
+        widgets.add(gridWidthEditField);
 
         gridHeightEditField = new EditField();
         gridHeightEditField.setText("" + gridHeight);
@@ -90,6 +97,20 @@ public class LWJGLgui extends Widget {
         });
         gridHeightEditField.setTheme("editfield");
         this.add(gridHeightEditField);
+        widgets.add(gridHeightEditField);
+
+
+        evaluationTimeEditField = new EditField();
+        evaluationTimeEditField.setText("" + (int) (game.getEvaluationStepTime() * 1000));
+        evaluationTimeEditField.addCallback(new Callback() {
+            @Override
+            public void callback(int key) {
+                evaluationTimeEditFieldCallback();
+            }
+        });
+        evaluationTimeEditField.setTheme("editfield");
+        this.add(evaluationTimeEditField);
+        widgets.add(evaluationTimeEditField);
     }
 
     /**
@@ -105,6 +126,7 @@ public class LWJGLgui extends Widget {
         });
         createGridButton.setTheme("button");
         this.add(createGridButton);
+        widgets.add(createGridButton);
 
         selectStartButton = new Button("Select Start Node");
         selectStartButton.addCallback(new Runnable() {
@@ -116,6 +138,7 @@ public class LWJGLgui extends Widget {
         selectStartButton.setTheme("button");
         selectStartButton.setEnabled(false);
         this.add(selectStartButton);
+        widgets.add(selectStartButton);
 
         selectGoalButton = new Button("Select Goal Node");
         selectGoalButton.addCallback(new Runnable() {
@@ -127,6 +150,7 @@ public class LWJGLgui extends Widget {
         selectGoalButton.setTheme("button");
         selectGoalButton.setEnabled(false);
         this.add(selectGoalButton);
+        widgets.add(selectGoalButton);
 
         drawWallButton = new Button("Draw Walls");
         drawWallButton.addCallback(new Runnable() {
@@ -138,6 +162,7 @@ public class LWJGLgui extends Widget {
         drawWallButton.setTheme("button");
         drawWallButton.setEnabled(false);
         this.add(drawWallButton);
+        widgets.add(drawWallButton);
 
         drawFloorButton = new Button("Draw Floors");
         drawFloorButton.addCallback(new Runnable() {
@@ -149,6 +174,7 @@ public class LWJGLgui extends Widget {
         drawFloorButton.setTheme("button");
         drawFloorButton.setEnabled(false);
         this.add(drawFloorButton);
+        widgets.add(drawFloorButton);
 
         startSimulationButton = new Button("Start");
         startSimulationButton.addCallback(new Runnable() {
@@ -160,6 +186,7 @@ public class LWJGLgui extends Widget {
         startSimulationButton.setTheme("button");
         startSimulationButton.setEnabled(false);
         this.add(startSimulationButton);
+        widgets.add(startSimulationButton);
     }
 
     /**
@@ -198,6 +225,19 @@ public class LWJGLgui extends Widget {
             }
         }
         gridHeight = tempHeight;
+    }
+
+    private void evaluationTimeEditFieldCallback() {
+        String text = evaluationTimeEditField.getText();
+        int tempEvaluationTimeMillis = 0;
+        if (text.length() > 0) {
+            try {
+                tempEvaluationTimeMillis = Integer.parseInt(text);
+            } catch (NumberFormatException ex) {
+                evaluationTimeEditField.setText(text.substring(0, text.length() - 1));
+            }
+        }
+        game.setEvaluationStepTime(tempEvaluationTimeMillis / 1000.0);
     }
 
     /**
@@ -328,8 +368,29 @@ public class LWJGLgui extends Widget {
         drawFloorButton.setPosition(buttonX, buttonY);
         drawFloorButton.setSize(150, 33);
 
+
+
+
+
+        evaluationTimeEditField.setPosition(buttonX, Display.getDisplayMode().getHeight() - 53 - 50);
+        evaluationTimeEditField.setSize(150, 33);
+
         startSimulationButton.setPosition(buttonX, Display.getDisplayMode().getHeight() - 53);
         startSimulationButton.setSize(150, 33);
+    }
+
+    public boolean mouseCollision(int mouseX, int mouseY) {
+        for (int i = 0; i < widgets.size(); i++) {
+            Widget widget = widgets.get(i);
+            int x0 = widget.getX();
+            int y0 = widget.getY();
+            int x1 = widget.getWidth() + x0;
+            int y1 = widget.getHeight() + y0;
+            if (x0 <= mouseX && mouseX <= x1 && y0 <= mouseY && mouseY <= y1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void update() {

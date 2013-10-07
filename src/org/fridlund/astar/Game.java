@@ -163,13 +163,21 @@ public class Game {
         aStar = new AStar(startNode, goalNode);
     }
 
+    public double getEvaluationStepTime() {
+        return evaluationStepTime;
+    }
+
+    public void setEvaluationStepTime(double evaluationStepTime) {
+        this.evaluationStepTime = evaluationStepTime;
+    }
+
     private void input() {
         if (grid != null) {
             int i = (Mouse.getX() - (int) offset.x) / Grid.TILE_SIZE;
             int j = (Mouse.getY() - (int) offset.y) / Grid.TILE_SIZE;
 
             if (Mouse.isButtonDown(0)) {
-                if (i >= 0 && i < grid.getWidth() && j >= 0 && j < grid.getHeight()) {
+                if (i >= 0 && i < grid.getWidth() && j >= 0 && j < grid.getHeight() && !gui.mouseCollision(Mouse.getX(), Display.getDisplayMode().getHeight() - Mouse.getY())) {
                     selectStartAndGoalNode(i, j);
 
                     if (drawWall) {
@@ -178,11 +186,11 @@ public class Game {
                         grid.setTileWalkable(i, j);
                     }
 
-                    Node n = grid.getNode(i, j);
-                    System.out.println("F = " + n.getF(goalNode));
-                    System.out.println("G = " + n.getG());
-                    System.out.println("H = " + n.getH(goalNode));
-                    System.out.println("");
+//                    Node n = grid.getNode(i, j);
+//                    System.out.println("F = " + n.getF(goalNode));
+//                    System.out.println("G = " + n.getG());
+//                    System.out.println("H = " + n.getH(goalNode));
+//                    System.out.println("");
                 }
             }
             if (Mouse.isButtonDown(1)) {
