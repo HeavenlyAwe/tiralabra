@@ -35,6 +35,11 @@ public class Game {
     private long currentTime;
     private double cumDT = 0;
 
+    /**
+     * Constructor
+     *
+     * creates the GUI and primary setup for OpenGL
+     */
     public Game() {
         this.gui = new LWJGLgui(this);
 
@@ -45,10 +50,17 @@ public class Game {
         setupOpenGL();
     }
 
+    /**
+     * Creates an Orthogonal Perspective matrix for rendering stuff without
+     * depth.
+     *
+     * Defines the clear color for OpenGL
+     *
+     * Rotates the table (in the X-Z plane), to show it from above.
+     */
     private void setupOpenGL() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-//        gluPerspective(70, (float) Display.getDisplayMode().getWidth() / (float) Display.getDisplayMode().getHeight(), 0.01f, 1000f);
         glOrtho(0, Display.getDisplayMode().getWidth(), 0, Display.getDisplayMode().getHeight(), 1000, -1000);
         glMatrixMode(GL_MODELVIEW);
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -57,25 +69,33 @@ public class Game {
         glRotatef(-90, 1, 0, 0);
     }
 
+    /**
+     * Sets the running flag to true and starts the main loop
+     */
     public void start() {
         running = true;
 
         mainLoop();
     }
 
+    /**
+     * Assigns a couple of flags for initialization
+     */
     public final void initialize() {
         this.runSimulation = false;
         this.finishedSimulation = false;
     }
 
+    /**
+     * Generates the grid and the labyrinth
+     *
+     * @param width
+     * @param height
+     */
     public void createGrid(int width, int height) {
         this.grid = new Grid(width, height);
         grid.generateNodes();
         grid.generateLabyrinth(1);
-
-// An attempt to center the grid around the center of the screen. Doesn't work when recreating the grid for another run
-//        this.offset = new Vector2f((Display.getDisplayMode().getWidth() - grid.getWidth() * Grid.TILE_SIZE) / 2, (Display.getDisplayMode().getHeight() - grid.getHeight() * Grid.TILE_SIZE) / 2);
-//        glTranslatef(offset.x, 0, offset.y);
     }
 
     private void mainLoop() {
@@ -86,7 +106,7 @@ public class Game {
             Screen.clear();
 
             currentTime = System.nanoTime();
-
+            // Calculates the delta time in seconds, from nanosecond scale
             double dt = (currentTime - lastTime) / 1000000000.0;
 
             input();
@@ -99,6 +119,9 @@ public class Game {
         }
     }
 
+    /**
+     * Sets the running flag to false
+     */
     public void stop() {
         running = false;
     }
@@ -123,6 +146,10 @@ public class Game {
         changeDrawType(false, false, false, true);
     }
 
+    public boolean bothStartAndGoalNodeSelected() {
+        return startNode != null && goalNode != null;
+    }
+
     private void changeDrawType(boolean goal, boolean start, boolean wall, boolean floor) {
         this.selectGoalNode = goal;
         this.selectStartNode = start;
@@ -143,21 +170,7 @@ public class Game {
 
             if (Mouse.isButtonDown(0)) {
                 if (i >= 0 && i < grid.getWidth() && j >= 0 && j < grid.getHeight()) {
-                    if (grid.getNode(i, j).isWalkable()) {
-                        if (selectGoalNode) {
-                            if (goalNode != null) {
-                                goalNode.setColor(Color.GREY);
-                            }
-                            goalNode = grid.getNode(i, j);
-                            goalNode.setColor(0, 0, 0, 1);
-                        } else if (selectStartNode) {
-                            if (startNode != null) {
-                                startNode.setColor(Color.GREY);
-                            }
-                            startNode = grid.getNode(i, j);
-                            startNode.setColor(Color.CYAN);
-                        }
-                    }
+                    selectStartAndGoalNode(i, j);
 
                     if (drawWall) {
                         grid.setTileNonWalkable(i, j);
@@ -193,8 +206,42 @@ public class Game {
         }
     }
 
+    /**
+     * Helper method for selecting marking start and goal nodes on the grid
+     *
+     * @param i
+     * @param j
+     */
+    private void selectStartAndGoalNode(int i, int j) {
+        if (grid.getNode(i, j).isWalkable()) {
+            if (selectGoalNode) {
+                if (goalNode != null) {
+                    goalNode.setColor(Color.GREY);
+                }
+                goalNode = grid.getNode(i, j);
+                goalNode.setColor(Color.BLACK);
+            } else if (selectStartNode) {
+                if (startNode != null) {
+                    startNode.setColor(Color.GREY);
+                }
+                startNode = grid.getNode(i, j);
+                startNode.setColor(Color.CYAN);
+            }
+        }
+    }
+
+    /**
+     * Updates the simulation based on the different flags. When the simulation
+     * is done it shows the path found.
+     *
+     * Enables the GUI for another run after it's finished.
+     *
+     * @param dt
+     */
     private void update(double dt) {
         cumDT += dt;
+
+        gui.update();
 
         if (runSimulation) {
             if (!finishedSimulation) {
@@ -206,14 +253,19 @@ public class Game {
                 runSimulation = false;
                 aStar.showPath();
                 gui.enableRestart();
+                startNode = null;
+                goalNode = null;
             }
         }
     }
 
+    /**
+     * Renders the grid (if it's not null) and updates the GUI
+     */
     private void render() {
         if (grid != null) {
             grid.render();
         }
-        gui.update();
+        gui.render();
     }
 }

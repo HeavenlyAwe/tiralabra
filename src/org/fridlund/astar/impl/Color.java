@@ -17,6 +17,7 @@ public class Color {
     public final static Color MAGENTA = new Color(1, 0, 1, 1);
     public final static Color CYAN = new Color(0, 1, 1, 1);
     public final static Color GREY = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+    public final static Color BLACK = new Color(0, 0, 0, 1);
     /*
      * Variables
      */

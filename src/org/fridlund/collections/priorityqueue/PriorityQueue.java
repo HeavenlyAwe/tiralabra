@@ -14,9 +14,11 @@ import java.util.Queue;
  * Implemented with a binary heap in array form.
  *
  *
- * poll Time: O(1) peek Time: O(1)
+ * poll Time: O(1)
+ * peek Time: O(1)
  *
- * add Time: O(log(n)) remove Time: O(n log(n))
+ * add Time: O(log(n))
+ * remove Time: O(n log(n))
  *
  * @author Christoffer
  */

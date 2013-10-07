@@ -19,6 +19,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 /**
+ * A GUI using the TWL (Theme Widget Library) for making a Swing-like gui in
+ * OpenGL
  *
  * @author Christoffer
  */
@@ -38,8 +40,6 @@ public class LWJGLgui extends Widget {
     private Button selectGoalButton;
     private Button drawWallButton;
     private Button drawFloorButton;
-    private boolean startSelected = false;
-    private boolean goalSelected = false;
 
     public LWJGLgui(Game game) {
         this.game = game;
@@ -65,6 +65,9 @@ public class LWJGLgui extends Widget {
         createButtons();
     }
 
+    /**
+     * Helper method for creating the TextFields
+     */
     private void createEditFields() {
         gridWidthEditField = new EditField();
         gridWidthEditField.setText("" + gridWidth);
@@ -89,6 +92,9 @@ public class LWJGLgui extends Widget {
         this.add(gridHeightEditField);
     }
 
+    /**
+     * Helper method for creating the Buttons
+     */
     private void createButtons() {
         createGridButton = new Button("Create Grid");
         createGridButton.addCallback(new Runnable() {
@@ -156,6 +162,12 @@ public class LWJGLgui extends Widget {
         this.add(startSimulationButton);
     }
 
+    /**
+     * Callback method for the Grid Width field.
+     *
+     * It only accepts numbers. All other characters will be caught in a number
+     * format exception and removed from the field.
+     */
     private void gridWidthEditFieldCallback() {
         String text = gridWidthEditField.getText();
         int tempWidth = 0;
@@ -169,6 +181,12 @@ public class LWJGLgui extends Widget {
         gridWidth = tempWidth;
     }
 
+    /**
+     * Callback method for the Grid Height field.
+     *
+     * It only accepts numbers. All other characters will be caught in a number
+     * format exception and removed from the field.
+     */
     private void gridHeightEditFieldCallback() {
         String text = gridHeightEditField.getText();
         int tempHeight = 0;
@@ -182,6 +200,12 @@ public class LWJGLgui extends Widget {
         gridHeight = tempHeight;
     }
 
+    /**
+     * Create Grid button action
+     *
+     * Creates a grid, based of the values in the grid width and grid height
+     * text fields. Then enables all the building buttons.
+     */
     private void createGridButtonCallback() {
         this.requestKeyboardFocus(null);
         game.initialize();
@@ -193,40 +217,52 @@ public class LWJGLgui extends Widget {
         drawFloorButton.setEnabled(true);
     }
 
+    /**
+     * Select start node button action.
+     *
+     * The update method will enable the start simulation button, after both the
+     * start and goal nodes have been placed on the grid.
+     */
     private void selectStartButtonCallback() {
         this.requestKeyboardFocus(null);
         game.selectStartNode();
-
-        startSelected = true;
-        if (startSelected && goalSelected) {
-            startSimulationButton.setEnabled(true);
-        }
     }
 
+    /**
+     * Select goal node button action.
+     *
+     * The update method will enable the start simulation button, after both the
+     * start and goal nodes have been placed on the grid.
+     */
     private void selectGoalButtonCallback() {
         this.requestKeyboardFocus(null);
         game.selectGoalNode();
-
-        goalSelected = true;
-        if (startSelected && goalSelected) {
-            startSimulationButton.setEnabled(true);
-        }
     }
 
+    /**
+     * Draw wall button action
+     */
     private void drawWallButtonCallback() {
         this.requestKeyboardFocus(null);
         game.drawWall();
     }
 
+    /**
+     * Draw floor button action
+     */
     private void drawFloorButtonCallback() {
         this.requestKeyboardFocus(null);
         game.drawFloor();
     }
 
+    /**
+     * Starts the simulation and disables the building buttons. One could let
+     * the building buttons be on, to try and prevent the AI from getting to the
+     * goal.
+     */
     private void startSimulationButtonCallback() {
         this.requestKeyboardFocus(null);
         game.startSimulation();
-
 
         gridWidthEditField.setEnabled(false);
         gridHeightEditField.setEnabled(false);
@@ -238,11 +274,10 @@ public class LWJGLgui extends Widget {
         drawWallButton.setEnabled(false);
     }
 
+    /**
+     * Sets the GUI to be ready for a restart of the simulation
+     */
     public void enableRestart() {
-
-        startSelected = false;
-        goalSelected = false;
-
         gridWidthEditField.setEnabled(true);
         gridHeightEditField.setEnabled(true);
 
@@ -250,6 +285,9 @@ public class LWJGLgui extends Widget {
         startSimulationButton.setEnabled(false);
     }
 
+    /**
+     * Placing the GUI-components on the screen.
+     */
     @Override
     protected void layout() {
 
@@ -295,9 +333,15 @@ public class LWJGLgui extends Widget {
     }
 
     public void update() {
-        gui.update();
+        startSimulationButton.setEnabled(game.bothStartAndGoalNodeSelected());
     }
 
+    /**
+     * The GUI doesn't actually have a render method, it wants to get updated
+     * instead. That's why I've chosen to do it in the render wrapper method,
+     * for easier access.
+     */
     public void render() {
+        gui.update();
     }
 }
