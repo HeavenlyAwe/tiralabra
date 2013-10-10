@@ -6,8 +6,6 @@ package org.fridlund.astar.impl;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.fridlund.collections.arraylist.ArrayList;
 import org.fridlund.collections.priorityqueue.PriorityQueue;
 import org.lwjgl.util.vector.Vector3f;
@@ -18,6 +16,10 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class AStar {
 
+    public enum Heuristics {
+
+        MANHATTAN, DIJKSTRA;
+    }
     private PriorityQueue<Node> open;
     private ArrayList<Node> closed;
     private ArrayList<Node> path;

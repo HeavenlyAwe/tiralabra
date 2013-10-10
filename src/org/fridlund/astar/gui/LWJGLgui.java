@@ -5,17 +5,24 @@
 package org.fridlund.astar.gui;
 
 import de.matthiasmann.twl.Button;
+import de.matthiasmann.twl.ComboBox;
 import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.EditField.Callback;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.Widget;
+import de.matthiasmann.twl.model.SimpleChangableListModel;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlElement;
 import org.fridlund.astar.Game;
+import org.fridlund.astar.impl.AStar;
+import org.fridlund.astar.impl.Heuristic;
+import org.fridlund.astar.impl.heuristics.DijkstraHeuristic;
+import org.fridlund.astar.impl.heuristics.ManhattanHeuristic;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
@@ -42,7 +49,9 @@ public class LWJGLgui extends Widget {
     private Button selectGoalButton;
     private Button drawWallButton;
     private Button drawFloorButton;
+    private ComboBox heuristicComboBox;
     private ArrayList<Widget> widgets;
+    private Heuristic heuristic;
 
     public LWJGLgui(Game game) {
         this.game = game;
@@ -68,6 +77,7 @@ public class LWJGLgui extends Widget {
 
         createEditFields();
         createButtons();
+        createComboBoxes();
 
     }
 
@@ -190,6 +200,38 @@ public class LWJGLgui extends Widget {
     }
 
     /**
+     * Helper method for creating the ComboBoxes
+     */
+    private void createComboBoxes() {
+        heuristicComboBox = new ComboBox<>(new SimpleChangableListModel(AStar.Heuristics.MANHATTAN, AStar.Heuristics.DIJKSTRA));
+        heuristicComboBox.setSelected(0);
+
+        heuristic = new ManhattanHeuristic();
+
+        heuristicComboBox.addCallback(new Runnable() {
+            @Override
+            public void run() {
+
+                switch (heuristicComboBox.getSelected()) {
+                    case 0:
+                        heuristic = new ManhattanHeuristic();
+                        break;
+                    case 1:
+                        heuristic = new DijkstraHeuristic();
+                        break;
+                    default:
+                        heuristic = new ManhattanHeuristic();
+                        break;
+                }
+
+            }
+        });
+        heuristicComboBox.setTheme("combobox");
+        this.add(heuristicComboBox);
+        widgets.add(heuristicComboBox);
+    }
+
+    /**
      * Callback method for the Grid Width field.
      *
      * It only accepts numbers. All other characters will be caught in a number
@@ -249,7 +291,7 @@ public class LWJGLgui extends Widget {
     private void createGridButtonCallback() {
         this.requestKeyboardFocus(null);
         game.initialize();
-        game.createGrid(gridWidth, gridHeight);
+        game.createGrid(gridWidth, gridHeight, heuristic);
 
         selectGoalButton.setEnabled(true);
         selectStartButton.setEnabled(true);
@@ -342,6 +384,11 @@ public class LWJGLgui extends Widget {
 
         gridHeightEditField.setPosition(buttonX, buttonY);
         gridHeightEditField.setSize(150, 33);
+
+        buttonY += 33 + 20;
+
+        heuristicComboBox.setPosition(buttonX, buttonY);
+        heuristicComboBox.setSize(150, 33);
 
         buttonY += 33 + 50;
 

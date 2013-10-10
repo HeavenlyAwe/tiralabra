@@ -8,12 +8,14 @@ import org.fridlund.astar.gui.LWJGLgui;
 import org.fridlund.astar.impl.AStar;
 import org.fridlund.astar.impl.Color;
 import org.fridlund.astar.impl.Grid;
+import org.fridlund.astar.impl.Heuristic;
 import org.fridlund.astar.impl.Node;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
@@ -92,23 +94,32 @@ public class Game {
      * @param width
      * @param height
      */
-    public void createGrid(int width, int height) {
-        this.grid = new Grid(width, height);
-        grid.generateNodes();
-        grid.generateLabyrinth(1);
+    public void createGrid(int width, int height, Heuristic heuristic) {
+
+        this.grid = new Grid(width, height, heuristic);
+        this.grid.generateNodes();
+        this.grid.generateLabyrinth(1);
     }
+    int fps = 0;
 
     private void mainLoop() {
 
         lastTime = System.nanoTime();
 
+        double fpsTimer = 0;
         while (running) {
             Screen.clear();
 
             currentTime = System.nanoTime();
             // Calculates the delta time in seconds, from nanosecond scale
             double dt = (currentTime - lastTime) / 1000000000.0;
-
+            fpsTimer += dt;
+            fps++;
+            if (fpsTimer >= 1.0) {
+                System.out.println("fps = " + fps);
+                fps = 0;
+                fpsTimer = 0;
+            }
             input();
             update(dt);
             render();

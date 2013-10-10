@@ -13,7 +13,7 @@ import org.lwjgl.LWJGLUtil;
  */
 public class Main {
 
-    private static final int WIDTH = 1000;
+    private static final int WIDTH = 1200;
     private static final int HEIGHT = 800;
     private static final String TITLE = "A* Test";
 

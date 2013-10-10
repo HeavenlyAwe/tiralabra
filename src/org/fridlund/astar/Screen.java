@@ -33,7 +33,7 @@ public class Screen {
         Display.setTitle(title);
         try {
             Display.setDisplayMode(new DisplayMode(width, height));
-            Display.setVSyncEnabled(true);
+//            Display.setVSyncEnabled(true);
 
             Display.create();
             Keyboard.create();

@@ -15,37 +15,18 @@ public class Grid {
 
     public static final int TILE_SIZE = 20;
     private Node[][] grid;
-    private Heuristic manhattanHeuristic;
-    private Heuristic dijkstraHeuristic;
+    private Heuristic heuristic;
 
-    public Grid(int rows, int columns) {
-        grid = new Node[rows][columns];
+    public Grid(int rows, int columns, Heuristic heuristic) {
+        this.grid = new Node[rows][columns];
+        this.heuristic = heuristic;
     }
 
     public void generateNodes() {
-        manhattanHeuristic = new Heuristic() {
-            @Override
-            public float heuristic(Node current, Node goal) {
-                Vector3f goalPosition = goal.getVertex().getPosition();
-                Vector3f position = current.getVertex().getPosition();
-
-                float dx = Math.abs(goalPosition.x - position.x);
-                float dy = Math.abs(goalPosition.y - position.y);
-                float dz = Math.abs(goalPosition.z - position.z);
-
-                return dx + dy + dz;
-            }
-        };
-        dijkstraHeuristic = new Heuristic() {
-            @Override
-            public float heuristic(Node current, Node goal) {
-                return 0;
-            }
-        };
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                grid[i][j] = new Node(new Vertex(new Vector3f(i * TILE_SIZE, 0, j * TILE_SIZE)), manhattanHeuristic, true);
+                grid[i][j] = new Node(new Vertex(new Vector3f(i * TILE_SIZE, 0, j * TILE_SIZE)), heuristic, true);
             }
         }
 

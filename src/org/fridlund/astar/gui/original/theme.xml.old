@@ -21,6 +21,7 @@
         <area name="white" xywh="1,36,1,1"/>
         <alias name="editfield.cursor" ref="white" tint="#90A5DD"/>
         <alias name="editfield.selection" ref="white" tint="#808BA7ED"/>
+        <alias name="combox.background" ref="box"/>
     </images>
     <fontDef name="normal" filename="font.fnt" color="#FFFFFF" default="true">
         <fontParam if="error" color="red"/>
@@ -66,9 +67,6 @@
         <param name="border"><border>10,0</border></param>
         <param name="font"><font>button.font</font></param>
     </theme>
-    <theme name="tooltipwindow" ref="-defaults">
-        <param name="fadeInTime"><int>0</int></param>
-    </theme>
     <theme name="editfield" ref="-defaults">
         <param name="background"><image>editfield.background</image></param>
         <param name="border"><border>10</border></param>
@@ -79,8 +77,36 @@
         <param name="passwordChar"><int>0</int></param>
         <theme name="renderer" ref="-defaults"/>
     </theme>
+    <theme name="combobox" ref="-defaults">
+        <param name="background"><image>combox.background</image></param>
+        <theme name="button" ref="-defaults">
+            <param name="font"><font>button.font</font></param>
+        </theme>
+        <theme name="display" ref="-defaults"/>
+        <param name="font"><font>button.font</font></param>
+        <param name="border"><border>10,0</border></param>
+    </theme>
+
+    <theme name="comboboxPopup" ref="-defaults">
+        <theme name="listbox" ref="-defaults">
+            <theme name="vscrollbar" ref="-defaults">
+                <theme name="upbutton" ref="-defaults"/>
+                <theme name="downbutton" ref="-defaults"/>
+                <theme name="thumb" ref="-defaults"/>
+                <param name="scaleThumb"><bool>false</bool></param>
+            </theme>
+            <theme name="display" ref="-defaults"/>
+            <param name="cellHeight"><int>0</int></param>
+            <param name="cellWidth"><int>0</int></param>
+        </theme>
+        <param name="border"><border>10,0</border></param>
+    </theme>
     <theme name="lwjglgui" ref="-defaults">
         <theme name="button" ref="button"/>
-        <theme name="editfiled" ref="editfield"/>
+        <theme name="editfield" ref="editfield"/>
+        <theme name="combobox" ref="combobox"/>
+    </theme>
+    <theme name="tooltipwindow" ref="-defaults">
+        <param name="fadeInTime"><int>0</int></param>
     </theme>
 </themes>
