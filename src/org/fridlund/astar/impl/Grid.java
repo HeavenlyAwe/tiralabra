@@ -22,7 +22,7 @@ public class Grid {
         this.heuristic = heuristic;
     }
 
-    public void generateNodes() {
+    public void generateNodes(boolean allowDiagonals) {
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
@@ -30,35 +30,52 @@ public class Grid {
             }
         }
 
+        addManhattanNeighbours();
+        if (allowDiagonals) {
+            addDiagonalNeighbours();
+        }
+    }
+
+    private void addManhattanNeighbours() {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
+
                 // North
                 if (j - 1 >= 0 && grid[i][j - 1].isWalkable()) {
                     grid[i][j].addNeighbour(grid[i][j - 1]);
-                }
-                // North East
-                if (j - 1 >= 0 && i + 1 < grid.length && grid[i + 1][j - 1].isWalkable()) {
-                    grid[i][j].addNeighbour(grid[i + 1][j - 1]);
                 }
                 // East
                 if (i + 1 < grid.length && grid[i + 1][j].isWalkable()) {
                     grid[i][j].addNeighbour(grid[i + 1][j]);
                 }
-                // South East
-                if (i + 1 < grid.length && j + 1 < grid[0].length && grid[i + 1][j + 1].isWalkable()) {
-                    grid[i][j].addNeighbour(grid[i + 1][j + 1]);
-                }
                 // South
                 if (j + 1 < grid[0].length && grid[i][j + 1].isWalkable()) {
                     grid[i][j].addNeighbour(grid[i][j + 1]);
                 }
-                // South West
-                if (j + 1 < grid[0].length && i - 1 >= 0 && grid[i - 1][j + 1].isWalkable()) {
-                    grid[i][j].addNeighbour(grid[i - 1][j + 1]);
-                }
                 // West
                 if (i - 1 >= 0 && grid[i - 1][j].isWalkable()) {
                     grid[i][j].addNeighbour(grid[i - 1][j]);
+                }
+
+            }
+        }
+    }
+
+    private void addDiagonalNeighbours() {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+
+                // North East
+                if (j - 1 >= 0 && i + 1 < grid.length && grid[i + 1][j - 1].isWalkable()) {
+                    grid[i][j].addNeighbour(grid[i + 1][j - 1]);
+                }
+                // South East
+                if (i + 1 < grid.length && j + 1 < grid[0].length && grid[i + 1][j + 1].isWalkable()) {
+                    grid[i][j].addNeighbour(grid[i + 1][j + 1]);
+                }
+                // South West
+                if (j + 1 < grid[0].length && i - 1 >= 0 && grid[i - 1][j + 1].isWalkable()) {
+                    grid[i][j].addNeighbour(grid[i - 1][j + 1]);
                 }
                 // North West
                 if (i - 1 >= 0 && j - 1 >= 0 && grid[i - 1][j - 1].isWalkable()) {
@@ -67,7 +84,6 @@ public class Grid {
 
             }
         }
-
     }
 
     public void setTileWalkable(int i, int j) {

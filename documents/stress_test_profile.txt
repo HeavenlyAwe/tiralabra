@@ -1,0 +1,35 @@
+================================================================
+Command Line (Windows):
+----------------------------------------------------------------
+
+java -jar tiralabra.jar -s 50 50 25 100
+	width     = 50
+	height    = 50
+	maxWidth  = 50 * 25 = 1250
+	maxHeight = 50 * 25 = 1250
+	loops     = 100			(100 entries in the time log file)
+
+
+================================================================
+GIT Bash (Windows):
+----------------------------------------------------------------
+
+java -jar tiralabra.jar -s 50 50 25 100
+	width     = 50
+	height    = 50
+	maxWidth  = 50 * 25 = 1250
+	maxHeight = 50 * 25 = 1250
+	loops     = 100			(100 entries in the time log file)
+
+
+================================================================
+Netbeans Shell (Windows):
+----------------------------------------------------------------
+
+java -jar tiralabra.jar -s 50 50 25 100
+	width     = 50
+	height    = 50
+	maxWidth  = 50 * 25 = 1250
+	maxHeight = 50 * 25 = 1250
+	loops     = 100			(100 entries in the time log file)
+

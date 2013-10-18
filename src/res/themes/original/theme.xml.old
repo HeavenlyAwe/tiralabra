@@ -77,7 +77,7 @@
         <param name="passwordChar"><int>0</int></param>
         <theme name="renderer" ref="-defaults"/>
     </theme>
-    <theme name="combobox" ref="-defaults">
+    <theme name="combobox" ref="button">
         <param name="background"><image>combox.background</image></param>
         <theme name="button" ref="-defaults">
             <param name="font"><font>button.font</font></param>
@@ -105,6 +105,7 @@
             <param name="fixedCellWidth"><bool>false</bool></param>
         </theme>
         <param name="border"><border>10,0</border></param>
+        <param name="background"><image>box</image></param>
     </theme>
     <theme name="lwjglgui" ref="-defaults">
         <theme name="button" ref="button"/>

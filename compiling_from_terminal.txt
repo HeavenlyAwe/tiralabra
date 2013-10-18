@@ -1,0 +1,81 @@
+compiling:
+--------------------------------
+
+
+# move into the root of the netbeans project
+cd root_of_project
+
+
+# Remove the ./temp_build and ./temp_jar folders if they exist
+rm -rf ./temp_build ./temp_jar
+
+
+# make a folder to compile all the classes into
+mkdir ./temp_build
+
+
+# compile the classes in all subfolders with the classpath set to ./lib/jars folder
+javac -cp ./lib/jars/lwjgl.jar:./lib/jars/lwjgl_util.jar:./lib/jars/TWL.jar:./lib/jars/xpp3-1.1.4c.jar -d ./temp_build ./src/org/fridlund/astar/*.java ./src/org/fridlund/astar/gui/*.java ./src/org/fridlund/astar/impl/*.java ./src/org/fridlund/collections/arraylist/*.java ./src/org/fridlund/collections/priorityqueue/*.java
+
+
+# Copy all files in ./src/res recursively to the ./temp_build folder.
+cp -R ./src/res/* ./temp_build
+
+
+# Make a folder for the final jar file
+mkdir temp_jar
+
+
+# Copy the stuff from the ./lib folder into ./temp_jar/lib folder
+cp -R ./lib ./temp_jar/lib
+
+
+# Copy the manifest entries to the ./temp_jar folder
+cp CustomManifest.txt ./temp_jar
+
+
+# Copy all the built classes to the ./temp_jar folder
+cp -R ./temp_build/* ./temp_jar
+
+
+# Remove the ./temp_build folder, as it's not needed anymore
+rm -rf ./temp_build
+
+
+# Move into the ./temp_jar folder
+cd ./temp_jar
+
+
+# Package all stuff into the .jar file
+jar cvmf CustomManifest.txt tiralabra.jar org res
+
+
+# Remove the CustomManifest.txt file from the ./temp_jar folder
+rm -rf CustomManifest.txt
+
+
+# Remove the ./org and ./res folders as they aren't needed anymore
+rm -rf ./org ./res
+
+
+
+==========================================================
+# All commands without comments
+# 	Assuming the cd root_of_project has been done
+==========================================================
+
+rm -rf ./temp_build ./temp_jar
+mkdir ./temp_build
+javac -cp ./lib/jars/lwjgl.jar:./lib/jars/lwjgl_util.jar:./lib/jars/TWL.jar:./lib/jars/xpp3-1.1.4c.jar -d ./temp_build ./src/org/fridlund/astar/*.java ./src/org/fridlund/astar/gui/*.java ./src/org/fridlund/astar/impl/*.java ./src/org/fridlund/collections/arraylist/*.java ./src/org/fridlund/collections/priorityqueue/*.java
+cp -R ./src/res ./temp_build
+mkdir temp_jar
+cp -R ./lib ./temp_jar/lib
+cp CustomManifest.txt ./temp_jar
+cp -R ./temp_build/* ./temp_jar
+rm -rf ./temp_build
+cd ./temp_jar
+jar cvmf CustomManifest.txt tiralabra.jar org res
+rm -rf CustomManifest.txt
+rm -rf ./org ./res
+
+

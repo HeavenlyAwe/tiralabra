@@ -56,6 +56,10 @@ public class Screen {
     public static boolean isCloseRequested() {
         return Display.isCloseRequested();
     }
+    
+    public static void setTitle(String title){
+        Display.setTitle(title);
+    }
 
     public static void destroy() {
         Keyboard.destroy();

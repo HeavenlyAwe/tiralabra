@@ -58,6 +58,9 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      * @param index
      */
     private void removeAndHeapify(int index) {
+        if(size == 0){
+            return;
+        }
         queue[index] = queue[size - 1];
         removeLast();
         heapifyMax(index);
@@ -69,6 +72,7 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      *
      * @param index
      */
+    @SuppressWarnings({"unchecked"})
     private void heapifyMax(int index) {
 
         int left = getLeft(index);
@@ -97,6 +101,7 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      * @param i1
      * @param i2
      */
+    @SuppressWarnings({"unchecked"})
     private void swap(int i1, int i2) {
         T temp = (T) queue[i1];
         queue[i1] = queue[i2];
@@ -189,6 +194,7 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      * @param a
      * @return
      */
+    @SuppressWarnings({"unchecked"})
     @Override
     public <T> T[] toArray(T[] a) {
         for (int i = 0; i < size; i++) {
@@ -208,6 +214,7 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      * @param e
      * @return True if everything worked.
      */
+    @SuppressWarnings({"unchecked"})
     @Override
     public boolean add(T e) {
         size = size + 1;
@@ -276,6 +283,7 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      *
      * @return
      */
+    @SuppressWarnings({"unchecked"})
     @Override
     public T peek() {
         return (T) queue[0];
@@ -286,8 +294,13 @@ public class PriorityQueue<T> implements Collection<T>, Queue<T> {
      *
      * @return The root of the heap
      */
+    @SuppressWarnings({"unchecked"})
     @Override
     public T poll() {
+        if(size == 0) {
+            return null;
+        }
+        
         T head = (T) queue[0];
 
         removeAndHeapify(0);

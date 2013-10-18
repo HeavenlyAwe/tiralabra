@@ -1,0 +1,3 @@
+Comment-Fridlund: This manifest file should be included when building the jar from command line
+Class-Path: lib/jars/lwjgl.jar lib/jars/lwjgl_util.jar lib/jars/TWL.jar lib/jars/xpp3-1.1.4c.jar
+Main-Class: org.fridlund.astar.Main

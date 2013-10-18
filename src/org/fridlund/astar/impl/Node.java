@@ -6,6 +6,7 @@ package org.fridlund.astar.impl;
 
 import java.util.ArrayList;
 import static org.lwjgl.opengl.GL11.*;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
@@ -100,6 +101,31 @@ public class Node implements Comparable<Node> {
         return color;
     }
 
+    public float distanceTo(Node n) {
+        Vector3f nextPos = n.getVertex().getPosition();
+        Vector3f currPos = this.getVertex().getPosition();
+        Vector3f output = new Vector3f();
+
+        return Vector3f.sub(nextPos, currPos, output).length();
+    }
+
+    public float getCostTo(Node n) {
+
+        Vector3f nextPos = n.getVertex().getPosition();
+        Vector3f currPos = this.getVertex().getPosition();
+        Vector3f output = new Vector3f();
+        Vector3f.sub(nextPos, currPos, output);
+
+//        float d = output.length();
+//
+//        System.out.println("x = " + output.x);
+//        System.out.println("y = " + output.y);
+//        System.out.println("z = " + output.z);
+//        System.out.println("d = " + d);
+
+        return output.length();
+    }
+
     public void render() {
         glBegin(GL_QUADS);
         {
@@ -124,7 +150,7 @@ public class Node implements Comparable<Node> {
 //        } else if(o.floatValue() < getG()){
 //            return -1;
 //        }
-        
+
         return 0;
     }
 }

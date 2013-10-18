@@ -94,11 +94,11 @@ public class Game {
      * @param width
      * @param height
      */
-    public void createGrid(int width, int height, Heuristic heuristic) {
+    public void createGrid(int width, int height, boolean allowDiagonals, Heuristic heuristic) {
 
         this.grid = new Grid(width, height, heuristic);
-        this.grid.generateNodes();
-        this.grid.generateLabyrinth(1);
+        this.grid.generateNodes(allowDiagonals);
+//        this.grid.generateLabyrinth(1);
     }
     int fps = 0;
 
@@ -116,7 +116,7 @@ public class Game {
             fpsTimer += dt;
             fps++;
             if (fpsTimer >= 1.0) {
-                System.out.println("fps = " + fps);
+                Screen.setTitle("A* TEST, fps = " + fps);
                 fps = 0;
                 fpsTimer = 0;
             }
@@ -171,7 +171,7 @@ public class Game {
     public void startSimulation() {
         changeDrawType(false, false, false, false);
         runSimulation = true;
-        aStar = new AStar(startNode, goalNode);
+        aStar = new AStar(startNode, goalNode, false);
     }
 
     public double getEvaluationStepTime() {

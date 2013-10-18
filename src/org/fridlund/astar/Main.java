@@ -43,13 +43,18 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        setupNativesLWJGL();
-        Screen.setupDisplay(TITLE, WIDTH, HEIGHT);
+        if (args.length > 0) {
+            StressTest.runStressTest(args);
+        } else {
 
-        Game game = new Game();
-        game.start();
+            setupNativesLWJGL();
+            Screen.setupDisplay(TITLE, WIDTH, HEIGHT);
 
-        Screen.destroy();
+            Game game = new Game();
+            game.start();
 
+            Screen.destroy();
+        }
     }
+
 }

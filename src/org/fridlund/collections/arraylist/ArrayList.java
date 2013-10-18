@@ -133,6 +133,7 @@ public class ArrayList<T> implements Collection<T>, List<T> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @SuppressWarnings({"unchecked"})
     @Override
     public T get(int index) {
         if (index < list.length && index >= 0) {
