@@ -3,6 +3,7 @@
 *.docx
 *.pptx
 
-/dist
-/temp_jar
-/temp_build
+/dist/
+/temp_jar/
+/temp_build/
+/build/
